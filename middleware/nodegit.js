@@ -1,0 +1,2 @@
+var Git = require('nodegit');
+

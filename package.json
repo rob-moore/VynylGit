@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node /.server --port 3000"
   },
   "author": "Rob Moore <rob@vynyl.com>",
   "license": "ISC",
@@ -12,5 +13,9 @@
     "convict": "^1.5.0",
     "express": "^4.14.0",
     "nodegit": "^0.16.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.12.2",
+    "eslint-config-vynyl": "^3.0.1"
   }
 }
