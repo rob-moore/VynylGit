@@ -1,0 +1,7 @@
+{
+  // The ip you would like the app to run on
+  ip: '127.0.0.1',
+
+  // The port you would like the app to run on
+  port: 8080,
+}
