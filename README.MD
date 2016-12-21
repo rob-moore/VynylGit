@@ -3,3 +3,4 @@
 ## Setup
 * Clone repository
 * `yarn install`
+* `npm start`

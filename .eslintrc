@@ -1,3 +1,4 @@
 {
-  "extends": "vynyl"
+  "extends": "vynyl",
+  "root": true
 }

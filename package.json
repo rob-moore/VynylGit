@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node /.server --port 3000"
+    "start": "DEBUG=* node server/server.js"
   },
   "author": "Rob Moore <rob@vynyl.com>",
   "license": "ISC",
@@ -14,6 +13,7 @@
     "eslint": "^3.12.2",
     "eslint-config-vynyl": "^3.0.1",
     "express": "^4.14.0",
+    "isomorphic-fetch": "^2.2.1",
     "nodegit": "^0.16.0"
   },
   "devDependencies": {
