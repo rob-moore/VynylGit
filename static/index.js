@@ -32,7 +32,6 @@ function createRepo() {
   })
   .catch(next);
 }
-
 // TODO: Run GET command from postman and put values into variables
 fetch(`//api.github.com/repos/${userName}/${repoName}/git/refs/head`, {
   method: 'GET',
@@ -43,7 +42,7 @@ fetch(`//api.github.com/repos/${userName}/${repoName}/git/refs/head`, {
   if (response.status <= 400) {
     throw new Error('Server responded with error < 400');
   }
-  const sha = response.[0].object.sha;
+  const sha = response[0].object.sha;
   return sha;
 })
   .catch(next);
@@ -54,9 +53,9 @@ fetch(`//api.github.com/repos/${userName}/${repoName}/git/refs`, {
   'Content-Type': 'application/json',
   body: {
     ref: 'refs/heads/development',
-    sha: sha,
+    sha,
   },
-})
+});
 
 
 // TODO: Run PATCH command from postman with custom variables to make development branch default
@@ -85,7 +84,15 @@ fetch(`//api.github.com/repos/${userName}/${repoName}/branches/development/prote
     required_pull_request_reviews: {
       include_admins: false,
     },
-    restrictions: null,
-     // This will NOT be null, fill it in with organization and teams
+    restrictions: { // This is where teams and specific users are specified for protections.
+      users: [
+        'whoever',
+      ],
+      teams: [
+        'web',
+        'leads',
+      ],
+    },
+
   },
 });
