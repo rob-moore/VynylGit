@@ -6,16 +6,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.2.3/css/bulma.min.css">
     <link rel="stylesheet" href="main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.1/fetch.min.js"></script>
+    <script src="https://use.fontawesome.com/03ad6df1b8.js"></script>
   </head>
   <body>
-    <section class="hero is-fullheight is-dark">
+    <section class="hero is-fullheight is-dark is-bold">
       <div class="hero-head">
         <nav class="nav">
           <div class="nav-left">
             <a class="nav-item is-brand" href="#">Vynyl Git Tools</a>
           </div>
           <div class="nav-right nav-menu">
-            <a class="nav-item" href="#" id="login" onclick="login()">
+            <a class="nav-item" href="/login" id="login">
               Login
             </a>
             <a class="nav-item" href="#">
@@ -28,7 +29,18 @@
         <div class="container has-text-centered box">
           <h1 class="title">Vynyl Git Tools</h1>
           <form class="control" onsubmit="createRepo()">
-            <input id="repoBox" type="text" name="repoName" class="input" placeholder="repo name here">
+            <p class="control has-icon">
+              <input id="username" class="input" type="text" placeholder="Github Username">
+              <i class="fa fa-user-circle"></i>
+            </p>
+            <p class="control has-icon">
+              <input id="password" class="input" type="password" placeholder="Password">
+              <i class="fa fa-lock"></i>
+            </p>
+            <p class="control has-icon">
+              <input id="repoBox" type="text" name="repoName" class="input" placeholder="Repo Name">
+              <i class="fa fa-github"></i>
+            </p>
             <a onclick="createRepo()" class="button is-success" type="button" name="button">Submit</a>
             <input id="privateBox" type="checkbox" name="private" value="false" class="checkbox" checked>
             Private?

@@ -1,23 +1,9 @@
 'use strict';
 
-function login() {
-  fetch('//api.github.com/user', {
-    method: 'POST',
-
-  })
-  .then(response => {
-    if (response.status <= 400) {
-      throw new Error('Server responded with error < 400');
-    }
-    return console.log(response);
-  });
-}
-
 function createRepo() {
-  console.log('hi from create');
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
   const repoName = document.getElementById('repoBox').value;
-  // TODO: Variable for github username through Auth
-  const userName = 'rob-moore';
   const privateBox = document.getElementById('privateBox');
   const payload = {
     name: `${repoName}`,
@@ -29,6 +15,9 @@ function createRepo() {
     has_downloads: true,
   };
 
+  const token = window.btoa(`${username}:${password}`);
+  sessionStorage.setItem('token', token);
+
   if (privateBox.checked === false) {
     payload.private = false;
   }
@@ -37,26 +26,28 @@ function createRepo() {
     method: 'POST',
     body: JSON.stringify(payload),
     headers: {
-      Authorization: 'Basic cm9iLW1vb3JlOmlhbW51bWJlcjE=',
+      Authorization: `Basic ${token}`,
       'Content-Type': 'application/json',
     },
   })
   .then(response => {
-    console.log('hi i\'m the first log', response);
     if (response.status >= 400) {
       return console.error('i had an error', response);
     } else {
-      console.log(response);
+      console.log('Repo created', response);
+      return response;
     }
   })
   .catch(err => {
     console.log('error in post', err);
   });
 }
-// TODO: pretty sure these all need to be seperate functions
 
+function addDevelopmentBranch() {
+
+}
 // TODO: Run GET command from postman and put values into variables
-// fetch(`https://api.github.com/repos/${userName}/${repoName}/git/refs/head`, {
+// fetch(`https://api.github.com/repos/${username}/${repoName}/git/refs/head`, {
 //   method: 'GET',
 //   'Content-Type': 'application/json',
 //   Accept: 'application/json',
@@ -71,7 +62,7 @@ function createRepo() {
 //   .catch(next);
 //
 // // TODO: Run POST command to add development branch
-// fetch(`//api.github.com/repos/${userName}/${repoName}/git/refs`, {
+// fetch(`//api.github.com/repos/${username}/${repoName}/git/refs`, {
 //   method: 'POST',
 //   'Content-Type': 'application/json',
 //   body: {
@@ -82,7 +73,7 @@ function createRepo() {
 //
 //
 // // TODO: Run PATCH command from postman with custom variables to make development branch default
-// fetch(`//api.github.com/repos/${userName}/${repoName}`, {
+// fetch(`//api.github.com/repos/${username}/${repoName}`, {
 //   method: 'PATCH',
 //   'Content-Type': 'application/json',
 //   body: {
@@ -93,7 +84,7 @@ function createRepo() {
 //
 //
 // // TODO: Run PUT command from postman to add branch protection
-// fetch(`//api.github.com/repos/${userName}/${repoName}/branches/development/protection`, {
+// fetch(`//api.github.com/repos/${username}/${repoName}/branches/development/protection`, {
 //   method: 'PUT',
 //   'Content-Type': 'application/json',
 //   body: {
