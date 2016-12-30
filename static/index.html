@@ -16,9 +16,6 @@
             <a class="nav-item is-brand" href="#">Vynyl Git Tools</a>
           </div>
           <div class="nav-right nav-menu">
-            <a class="nav-item" href="/login" id="login">
-              Login
-            </a>
             <a class="nav-item" href="#">
               Documentation
             </a>
@@ -28,7 +25,7 @@
       <div class="hero-body">
         <div class="container has-text-centered box">
           <h1 class="title">Vynyl Git Tools</h1>
-          <form class="control" onsubmit="createRepo()">
+          <form class="control" onsubmit="create()">
             <p class="control has-icon">
               <input id="username" class="input" type="text" placeholder="Github Username">
               <i class="fa fa-user-circle"></i>
@@ -41,8 +38,8 @@
               <input id="repoBox" type="text" name="repoName" class="input" placeholder="Repo Name">
               <i class="fa fa-github"></i>
             </p>
-            <a onclick="createRepo()" class="button is-success" type="button" name="button">Submit</a>
-            <input id="privateBox" type="checkbox" name="private" value="false" class="checkbox" checked>
+            <a onclick="create()" class="button is-success" type="button" name="button">Submit</a>
+            <input id="privateBox" type="checkbox" name="private" value="false" class="checkbox">
             Private?
           </div>
         </form>

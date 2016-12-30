@@ -1,9 +1,21 @@
 'use strict';
 
+const userToCreate = 'rob-moore';
+let repoName;
+let token;
+
+function status(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return Promise.resolve(response);
+  }
+  return Promise.reject(new Error(response.statusText));
+}
+
+// Create Repo based on user input
 function createRepo() {
+  repoName = document.getElementById('repoBox').value;
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
-  const repoName = document.getElementById('repoBox').value;
   const privateBox = document.getElementById('privateBox');
   const payload = {
     name: `${repoName}`,
@@ -15,14 +27,13 @@ function createRepo() {
     has_downloads: true,
   };
 
-  const token = window.btoa(`${username}:${password}`);
-  sessionStorage.setItem('token', token);
+  token = window.btoa(`${username}:${password}`);
 
   if (privateBox.checked === false) {
     payload.private = false;
   }
 
-  fetch('https://api.github.com/user/repos', {
+  return fetch('https://api.github.com/user/repos', {
     method: 'POST',
     body: JSON.stringify(payload),
     headers: {
@@ -30,83 +41,92 @@ function createRepo() {
       'Content-Type': 'application/json',
     },
   })
-  .then(response => {
-    if (response.status >= 400) {
-      return console.error('i had an error', response);
-    } else {
-      console.log('Repo created', response);
-      return response;
-    }
-  })
+  .then(status)
   .catch(err => {
     console.log('error in post', err);
   });
 }
 
+//  Adds development branch and sets development to default
 function addDevelopmentBranch() {
-
+  return fetch(`https://api.github.com/repos/${userToCreate}/${repoName}/git/refs/head`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Basic ${token}`,
+    },
+  })
+  .then(status)
+  .then(response => response.json())
+  .then(response => response[0].object.sha)
+  .then(sha => {
+    const payload = {
+      ref: 'refs/heads/development',
+      sha,
+    };
+    return fetch(`https://api.github.com/repos/${userToCreate}/${repoName}/git/refs`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+  })
+  .then(() => {
+    const payload = {
+      name: `${repoName}`,
+      default_branch: 'development',
+    };
+    return fetch(`https://api.github.com/repos/${userToCreate}/${repoName}`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Basic ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+  })
+  .catch(err => {
+    console.log('error in add development', err);
+  });
 }
-// TODO: Run GET command from postman and put values into variables
-// fetch(`https://api.github.com/repos/${username}/${repoName}/git/refs/head`, {
-//   method: 'GET',
-//   'Content-Type': 'application/json',
-//   Accept: 'application/json',
-// })
-// .then(response => {
-//   if (response.status <= 400) {
-//     throw new Error('Server responded with error < 400');
-//   }
-//   const sha = response[0].object.sha;
-//   return sha;
-// })
-//   .catch(next);
-//
-// // TODO: Run POST command to add development branch
-// fetch(`//api.github.com/repos/${username}/${repoName}/git/refs`, {
-//   method: 'POST',
-//   'Content-Type': 'application/json',
-//   body: {
-//     ref: 'refs/heads/development',
-//     sha,
-//   },
-// });
-//
-//
-// // TODO: Run PATCH command from postman with custom variables to make development branch default
-// fetch(`//api.github.com/repos/${username}/${repoName}`, {
-//   method: 'PATCH',
-//   'Content-Type': 'application/json',
-//   body: {
-//     name: `${repoName}`,
-//     default_branch: 'development',
-//   },
-// });
+
+// Sets branch permissions
+function setPermissions() {
+  const payload = {
+    required_status_checks: {
+      include_admins: true,
+      strict: true,
+      contexts: [
+        'continuous-integration/travis-ci', // Probably something different here
+      ],
+    },
+    required_pull_request_reviews: {
+      include_admins: false,
+    },
+    restrictions: { // This is where teams and specific users are specified for protections.
+      users: [
+        'whoever',
+      ],
+      teams: [
+        'web',
+        'leads',
+      ],
+    },
+
+  };
+  return fetch(`https://api.github.com/repos/${userToCreate}/${repoName}/branches/development/protection`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Basic ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+}
+
+// Main function that runs everything
+function create() {
+  createRepo()
+  .then(addDevelopmentBranch);
+}
 //
 //
 // // TODO: Run PUT command from postman to add branch protection
-// fetch(`//api.github.com/repos/${username}/${repoName}/branches/development/protection`, {
-//   method: 'PUT',
-//   'Content-Type': 'application/json',
-//   body: {
-//     required_status_checks: {
-//       include_admins: true,
-//       strict: true,
-//       contexts: [
-//         'continuous-integration/travis-ci', // Probably something different here
-//       ],
-//     },
-//     required_pull_request_reviews: {
-//       include_admins: false,
-//     },
-//     restrictions: { // This is where teams and specific users are specified for protections.
-//       users: [
-//         'whoever',
-//       ],
-//       teams: [
-//         'web',
-//         'leads',
-//       ],
-//     },
-//
-//   },
-// });
