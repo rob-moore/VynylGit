@@ -1,7 +1,7 @@
 'use strict';
 
 // const userToCreate = 'rob-moore';
-let userToCreate;
+let username;
 let repoName;
 let token;
 
@@ -15,7 +15,7 @@ function status(response) {
 // Create Repo based on user input
 function createRepo() {
   repoName = document.getElementById('repoBox').value;
-  const username = document.getElementById('username').value;
+  username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
   const privateBox = document.getElementById('privateBox');
   const payload = {
@@ -50,7 +50,7 @@ function createRepo() {
 
 //  Adds development branch and sets development to default
 function addDevelopmentBranch() {
-  return fetch(`https://api.github.com/repos/${userToCreate}/${repoName}/git/refs/head`, {
+  return fetch(`https://api.github.com/repos/${username}/${repoName}/git/refs/head`, {
     method: 'GET',
     headers: {
       Authorization: `Basic ${token}`,
@@ -64,7 +64,7 @@ function addDevelopmentBranch() {
       ref: 'refs/heads/development',
       sha,
     };
-    return fetch(`https://api.github.com/repos/${userToCreate}/${repoName}/git/refs`, {
+    return fetch(`https://api.github.com/repos/${username}/${repoName}/git/refs`, {
       method: 'POST',
       headers: {
         Authorization: `Basic ${token}`,
@@ -77,7 +77,7 @@ function addDevelopmentBranch() {
       name: `${repoName}`,
       default_branch: 'development',
     };
-    return fetch(`https://api.github.com/repos/${userToCreate}/${repoName}`, {
+    return fetch(`https://api.github.com/repos/${username}/${repoName}`, {
       method: 'PATCH',
       headers: {
         Authorization: `Basic ${token}`,
