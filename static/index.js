@@ -1,6 +1,7 @@
 'use strict';
 
-const userToCreate = 'rob-moore';
+// const userToCreate = 'rob-moore';
+let userToCreate;
 let repoName;
 let token;
 
