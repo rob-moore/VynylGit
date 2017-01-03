@@ -8,16 +8,16 @@
 ## Process
 I wanted to create an app that dealt with Github for in order to fill a need for the company but also to practice my javascript as well as making API calls, manipulating data, starting a project from scratch, and choosing what stack to use for my project.
 
-This project was originally going to be handling all of the API calls with Express through the backend, however, given the time constraints the MVP is handling that on the front end. While everything currently works it is very insecure if it were to be released to the public for mass use.
+This project was originally going to be handling all of the API calls with Express through the backend, however, given the time constraints, the MVP is handling that on the front end. While everything currently works it is very insecure if it were to be released to the public for mass use.
 
-With this being the MVP, there is still plenty of things to do. I'd like to incorporate OAuth for added security. There is also some more functionality that needs to be added. I need to add the ability to copy files from exsisting repos as well as make one more API call to set all the teams and the last of the permissions on the newly created repo.
+With this being the MVP, there is still plenty of things to do. I'd like to incorporate OAuth for added security. There is also some more functionality that needs to be added. I need to add the ability to copy files from existing repos as well as make one more API call to set all the teams and the last of the permissions on the newly created repo.
 
 For the frontend of this project I used [bulma](https://bulma.io). It's a really lightweight grid setup that was really easy to use. It's in a similar vein to Bootstrap, just much lighter it also seemed to follow a material design kind of setup that I really liked aesthetically.
 
 I used [Postman](https://www.getpostman.com/) to create and test all of my API calls. I was really excited about this because I had wanted more postman experience for a while now. It was great for testing issues that I was a having.
 
 ## Challenges
-There were plenty of challenges that I ran into with this project. Prior to the this project my javascript knowledge was really minimal. Many of the roadblocks that I ran into during the start of this project were related to sytnax.
+There were plenty of challenges that I ran into with this project. Prior to this project, my javascript knowledge was really minimal. Many of the roadblocks that I ran into during the start of this project were related to syntax.
 
 After learning about syntax and several important built-in functions like `window.btoa` for handling the API token creation and `JSON.stringify()` for making my various data payloads readable. I started making my API calls with [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch). Overall it was fairly straightforward to get setup and start using right away. This also gave me plenty of practice with promises. I had heard about promises before but I hadn't really been able to apply the theory behind them into what I was doing until now. This also gave me some really good experience learning about error handling.
 
