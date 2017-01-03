@@ -1,72 +1,135 @@
 'use strict';
 
-function createRepo() {
-  const userInput = document.getElementById('repoBox').value;
-  // TODO: Variable for github username through Auth
+// const userToCreate = 'rob-moore';
+let username;
+let repoName;
+let token;
 
+function status(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return Promise.resolve(response);
+  }
+  return Promise.reject(new Error(response.statusText));
+}
+
+// Create Repo based on user input
+function createRepo() {
+  repoName = document.getElementById('repoBox').value;
+  username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
   const privateBox = document.getElementById('privateBox');
   const payload = {
-    name: `${userInput}`,
-    homepage: 'https://github.com',
+    name: `${repoName}`,
+    homepage: 'https://vynyl.com',
     auto_init: true,
-    private: false,
+    private: true,
     has_issues: false,
     has_wiki: false,
     has_downloads: true,
   };
 
-  if (privateBox.checked === true) {
-    payload.private = true;
-    return true;
+  token = window.btoa(`${username}:${password}`);
+
+  if (privateBox.checked === false) {
+    payload.private = false;
   }
-  console.log(payload);
+
+  return fetch('https://api.github.com/user/repos', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {
+      Authorization: `Basic ${token}`,
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(status)
+  .catch(err => {
+    console.log('error in post', err);
+  });
 }
 
-// TODO: Run GET command from postman and put values into variables
-// https://api.github.com/repos/rob-moore/postmanTest/git/refs/head
+//  Adds development branch and sets development to default
+function addDevelopmentBranch() {
+  return fetch(`https://api.github.com/repos/${username}/${repoName}/git/refs/head`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Basic ${token}`,
+    },
+  })
+  .then(status)
+  .then(response => response.json())
+  .then(response => response[0].object.sha)
+  .then(sha => {
+    const payload = {
+      ref: 'refs/heads/development',
+      sha,
+    };
+    return fetch(`https://api.github.com/repos/${username}/${repoName}/git/refs`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+  })
+  .then(() => {
+    const payload = {
+      name: `${repoName}`,
+      default_branch: 'development',
+    };
+    return fetch(`https://api.github.com/repos/${username}/${repoName}`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Basic ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+  })
+  .catch(err => {
+    console.log('error in add development', err);
+  });
+}
 
-// TODO: Run POST command to add development branch
-// https://api.github.com/repos/rob-moore/postmanTest/git/refs
-// {
-//     "ref": "refs/heads/development",
-//     "sha": "HASH FROM GET"
+// TODO: Sets branch permissions
+// function setPermissions() {
+//   const payload = {
+//     required_status_checks: {
+//       include_admins: true,
+//       strict: true,
+//       contexts: [
+//         'continuous-integration/travis-ci', // Probably something different here
+//       ],
+//     },
+//     required_pull_request_reviews: {
+//       include_admins: false,
+//     },
+//     restrictions: { // This is where teams and specific users are specified for protections.
+//       users: [
+//         'rob-moore',
+//       ],
+//       teams: [
+//         'web',
+//         'leads',
+//       ],
+//     },
+//
+//   };
+//   return fetch(`https://api.github.com/repos/${userToCreate}/${repoName}/branches/development/protection`, {
+//     method: 'PUT',
+//     headers: {
+//       Authorization: `Basic ${token}`,
+//       Accept: 'application/vnd.github.v3+json',
+//     },
+//     body: JSON.stringify(payload),
+//   });
 // }
 
-// TODO: Run PATCH command from postman with custom variables to make development branch default
-// https://api.github.com/repos/rob-moore/postmanTest
-// {
-// "name": `${userInput}`,
-// "default_branch": "development"
-// }
-
-// TODO: Run PUT command from postman to add branch protection
-// https://api.github.com/repos/rob-moore/postmanTest/branches/development/protection
-// {
-//   "required_status_checks": {
-//     "include_admins": true,
-//     "strict": true,
-//     "contexts": [
-//       "continuous-integration/travis-ci" Probably something different here
-//     ]
-//   },
-//   "required_pull_request_reviews": {
-//     "include_admins": false
-//   },
-//   "restrictions": null
-//    This will NOT be null, fill it in with organization and teams
-// }
-
-//   fetch(`//api.github.com/${userInput}`, { method: 'POST' })
-//       .then(response => {
-//         if (response.status >= 400) {
-//           // TODO: Do I need to pass this error to next()?
-//           throw new Error('Bad response from server');
-//         }
-//         return response.json();
-//       })
-//       .then(stories => {
-//         res.send(stories);
-//         return next();
-//       })
-//       .catch(next);
-// }
+// Main function that runs everything
+function create() {
+  createRepo()
+  .then(addDevelopmentBranch);
+  // .then(setPermissions);
+}
+//
+//
+// // TODO: Run PUT command from postman to add branch protection

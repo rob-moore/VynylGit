@@ -1,12 +1,15 @@
-.hero-body h1{
-  color:black;
+.hero.is-dark, .hero.is-dark .title {
+  color: #363636;
 }
-
-.input{
+.input {
   margin-bottom: 20px;
 }
 
-.checkbox{
+.checkbox {
   margin-top:10px;
   margin-left: 20px;
+}
+
+.box {
+  background-color: #b5b5b5;
 }
