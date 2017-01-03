@@ -12,9 +12,11 @@ This project was originally going to be handling all of the API calls with Expre
 
 With this being the MVP, there is still plenty of things to do. I'd like to incorporate OAuth for added security. There is also some more functionality that needs to be added. I need to add the ability to copy files from existing repos as well as make one more API call to set all the teams and the last of the permissions on the newly created repo.
 
-For the frontend of this project I used [bulma](https://bulma.io). It's a really lightweight grid setup that was really easy to use. It's in a similar vein to Bootstrap, just much lighter it also seemed to follow a material design kind of setup that I really liked aesthetically.
+For the frontend of this project I used [bulma](https://github.com/jgthms/bulma). It's a really lightweight grid setup that was really easy to use. It's in a similar vein to Bootstrap, just much lighter it also seemed to follow a material design kind of setup that I really liked aesthetically.
 
 I used [Postman](https://www.getpostman.com/) to create and test all of my API calls. I was really excited about this because I had wanted more postman experience for a while now. It was great for testing issues that I was a having.
+
+For the future of this project I plan on eventually deploying everything to a domain using docker and AWS. There will be a insecure deploy of this working MVP version of the app soon and I'll be continuing to add new features as the year progresses.
 
 ## Challenges
 There were plenty of challenges that I ran into with this project. Prior to this project, my javascript knowledge was really minimal. Many of the roadblocks that I ran into during the start of this project were related to syntax.
