@@ -89,43 +89,45 @@ function addDevelopmentBranch() {
   });
 }
 
-// Sets branch permissions
-function setPermissions() {
-  const payload = {
-    required_status_checks: {
-      include_admins: true,
-      strict: true,
-      contexts: [
-        'continuous-integration/travis-ci', // Probably something different here
-      ],
-    },
-    required_pull_request_reviews: {
-      include_admins: false,
-    },
-    restrictions: { // This is where teams and specific users are specified for protections.
-      users: [
-        'whoever',
-      ],
-      teams: [
-        'web',
-        'leads',
-      ],
-    },
-
-  };
-  return fetch(`https://api.github.com/repos/${userToCreate}/${repoName}/branches/development/protection`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Basic ${token}`,
-    },
-    body: JSON.stringify(payload),
-  });
-}
+// TODO: Sets branch permissions
+// function setPermissions() {
+//   const payload = {
+//     required_status_checks: {
+//       include_admins: true,
+//       strict: true,
+//       contexts: [
+//         'continuous-integration/travis-ci', // Probably something different here
+//       ],
+//     },
+//     required_pull_request_reviews: {
+//       include_admins: false,
+//     },
+//     restrictions: { // This is where teams and specific users are specified for protections.
+//       users: [
+//         'rob-moore',
+//       ],
+//       teams: [
+//         'web',
+//         'leads',
+//       ],
+//     },
+//
+//   };
+//   return fetch(`https://api.github.com/repos/${userToCreate}/${repoName}/branches/development/protection`, {
+//     method: 'PUT',
+//     headers: {
+//       Authorization: `Basic ${token}`,
+//       Accept: 'application/vnd.github.v3+json',
+//     },
+//     body: JSON.stringify(payload),
+//   });
+// }
 
 // Main function that runs everything
 function create() {
   createRepo()
   .then(addDevelopmentBranch);
+  // .then(setPermissions);
 }
 //
 //
